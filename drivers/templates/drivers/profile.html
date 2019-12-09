@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="rides">
+    <h1>Przypisane przejazdy</h1>
+  </div>
+    {% if driver_flag %}
+  <div class="rides">
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Użytkownik</th>
+        <th>Skąd</th>
+        <th>Dokąd</th>
+      </tr>
+    {% for obj in driver_rides %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.passenger_username }}</td>
+        <td>{{ obj.pick_up }}</td>
+        <td>{{ obj.drop_off }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+  
+{% else %}
+  <div class="rides">
+    <h4>Nie masz nadchodzących przejazdów jako kierowca</h4>
+  </div>
+{% endif %}
+
+{% if passenger_flag %}
+  <div class="rides">  
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Użytkownik</th>
+        <th>Skąd</th>
+        <th>Dokąd</th>
+      </tr>
+    {% for obj in passenger_rides %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.driver_username }}</td>
+        <td>{{ obj.pick_up }}</td>
+        <td>{{ obj.drop_off }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% else %}
+  <div class="rides">
+    <h4>Nie masz nadchodzących przejazdów jako pasażer</h4>
+  </div>
+{% endif %}
+</div>
+{% endblock %}

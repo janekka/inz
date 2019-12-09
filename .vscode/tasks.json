@@ -1,0 +1,7 @@
+{
+    "version": "2.0.0",
+    "command": "sass",
+    "isShellCommand": true,
+    "args": ["--watch", "."],
+    "showOutput": "always"
+}

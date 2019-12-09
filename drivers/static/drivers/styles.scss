@@ -1,0 +1,20 @@
+$padding: 6px;
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color:honeydew;
+    min-height: 650px;
+
+    .container {
+        padding: 2px;
+        margin: 5px;
+
+        .rides {
+            background-color: rgb(255, 255, 255);
+            padding: 5px;
+            margin: 5px;
+        }
+    }
+}

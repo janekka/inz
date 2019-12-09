@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home</title>
+</head>
+  <body>
+    <div class="container">
+
+        {% block content %}
+        {% if user %}
+          Witaj {{ username }}!
+          <p><a href="{% url 'logout' %}">Wyloguj się</a></p>
+        {% else %}
+          <p>You are not logged in</p>
+          <a href="{% url 'login' %}">Logowanie</a> <br>
+          <a href="{% url 'rejestracja' %}">Rejestracja</a> <br>
+        {% endif %}
+        {% endblock %}
+
+
+    {% block body_block %}
+    {{user}}
+    {% endblock %}
+    </div>
+  </body>
+</html>

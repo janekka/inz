@@ -1,0 +1,18 @@
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: honeydew;
+  min-height: 650px;
+}
+main .container {
+  padding: 2px;
+  margin: 5px;
+}
+main .container .rides {
+  background-color: white;
+  padding: 5px;
+  margin: 5px;
+}
+
+/*# sourceMappingURL=styles.css.map */
