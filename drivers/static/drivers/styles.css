@@ -2,8 +2,9 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: honeydew;
+  background-color: #e4aaff;
   min-height: 650px;
+  font-family: "Bookman Old Style";
 }
 main .container {
   padding: 2px;

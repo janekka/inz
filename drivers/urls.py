@@ -11,4 +11,5 @@ urlpatterns = [
     path('add_passenger/', views.add_passenger_view, name='dodaj przejazd'),
     path('', views.home_view, name='home'),
     path('', include('django.contrib.auth.urls')),
+    path('edit_driver/<int:id>', views.edit_driver_ride_view, name='edit_driver')
 ]

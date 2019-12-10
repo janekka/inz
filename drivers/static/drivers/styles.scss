@@ -1,11 +1,12 @@
-$padding: 6px;
+
 
 main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color:honeydew;
+    background-color:rgb(228, 170, 255);
     min-height: 650px;
+    font-family: "Bookman Old Style";
 
     .container {
         padding: 2px;

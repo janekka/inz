@@ -55,5 +55,61 @@
     <h4>Nie masz nadchodzących przejazdów jako pasażer</h4>
   </div>
 {% endif %}
+
+<div class="rides">
+  <h1>Ogłoszone przejazdy</h1>
 </div>
+{% if offered_driver_flag %}
+  <div class="rides">
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Skąd</th>
+        <th>Dokąd</th>
+        <th>Przystanki</th>
+      </tr>
+    {% for obj in offered_driver_rides %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.start }}</td>
+        <td>{{ obj.end }}</td>
+        <td>{{ obj.stops }}</td>
+        <td><a href="{% url 'edit_driver' obj.id %}">edytuj</a></td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+  
+{% else %}
+  <div class="rides">
+    <h4>Nie ogłosiłeś żadnego przejazdu jako kierowca</h4>
+  </div>
+{% endif %}
+
+
+{% if offered_passenger_flag %}
+  <div class="rides">
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Skąd</th>
+        <th>Dokąd</th>
+      </tr>
+    {% for obj in offered_passenger_rides %}
+      <tr>
+        <td>{{ obj.date }}</td>
+        <td>{{ obj.start }}</td>
+        <td>{{ obj.end }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+  </div>
+  
+{% else %}
+  <div class="rides">
+    <h4>Nie ogłosiłeś żadnego przejazdu jako pasażer</h4>
+  </div>
+{% endif %}
+</div>
+
 {% endblock %}

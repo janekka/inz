@@ -1,11 +1,12 @@
 from django.contrib.auth import login, authenticate
 from .forms import SignUpForm, DriverForm, PassengerForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Ride, Driver, Passenger
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from .google_maps import get_distance, get_arrivals
 import time
 from calendar import timegm
+from .help_funcs import time_to_epoch
 
 # Create your views here.
 def home_view(request, *args, **kwargs):
@@ -37,7 +38,9 @@ def profile_view(request):
     if request.user.is_authenticated:
         driver_rides = Ride.objects.filter(driver_username = request.user.username)
         passenger_rides = Ride.objects.filter(passenger_username = request.user.username)
-        
+        offered_driver_rides = Driver.objects.filter(username = request.user.username)
+        offered_passenger_rides = Passenger.objects.filter(username = request.user.username)
+
         if len(driver_rides) == 0:
             driver_flag = False
         else:
@@ -48,6 +51,16 @@ def profile_view(request):
            
         else:
             passenger_flag = True
+
+        if len(offered_driver_rides) == 0:
+            offered_driver_flag = False
+        else:
+            offered_driver_flag = True
+
+        if len(offered_passenger_rides) == 0:
+            offered_passenger_flag = False
+        else:
+            offered_passenger_flag = True
            
         
         #d_dates = driver_rides.date
@@ -56,8 +69,12 @@ def profile_view(request):
         info = {
             'passenger_flag':passenger_flag,
             'driver_flag':driver_flag,
+            'offered_passenger_flag':offered_passenger_flag,
+            'offered_driver_flag':offered_driver_flag,
             'driver_rides':driver_rides,
             'passenger_rides':passenger_rides,
+            'offered_driver_rides':offered_driver_rides,
+            'offered_passenger_rides':offered_passenger_rides,
         }
         return render(request, 'profile.html', info)
     else:
@@ -66,6 +83,8 @@ def profile_view(request):
 def add_driver_view(request):
     form = DriverForm(request.POST)
     if form.is_valid() and request.user.is_authenticated:
+
+        #times = time_to_epoch(form.cleaned_data['date'],form.cleaned_data['time_dep'], (form.cleaned_data['start'],form.cleaned_data['stops'],form.cleaned_data['end']))
 
         time_string = str(form.cleaned_data['date']) + 'T' + str(form.cleaned_data['time_dep'])
         time_stripped = time.strptime(time_string, '%Y-%m-%dT%H:%M:%S')
@@ -132,3 +151,66 @@ def add_passenger_view(request):
     else:
         return redirect('profil')
     return render(request, 'add_passenger.html', {'form':form})
+
+def edit_driver_ride_view(request, id=None):
+
+    ride = get_object_or_404(Driver, id=id)
+    if ride.username != request.user.username:
+        return HttpResponseForbidden()
+    
+    t = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(ride.time_dep))
+    data = {
+        'start':ride.start,
+        'end':ride.end,
+        'stops':ride.stops,
+        'date':t[:10],
+        'time_dep':t[11:16],
+        'car_model':ride.car_model,
+        'car_cap':ride.car_cap,
+        'cigs':ride.cigs,
+        'pets':ride.pets, 
+        'price':ride.price
+        }
+    form = DriverForm(request.POST)
+    if request.POST and form.is_valid():
+        print('inside if')
+
+        time_string = str(form.cleaned_data['date']) + 'T' + str(form.cleaned_data['time_dep'])
+        time_stripped = time.strptime(time_string, '%Y-%m-%dT%H:%M:%S')
+        epoch_time_dep = timegm(time_stripped)
+        args = [form.cleaned_data['start'],]
+        for el in form.cleaned_data['stops'].split():
+            args.append(el)
+        args.append(form.cleaned_data['end'])
+        arr_times = get_arrivals(args)
+
+        for i in range(len(arr_times)):
+            arr_times[i] = epoch_time_dep + arr_times[i]
+
+        arr_times_str = ''
+        for el in arr_times[:-1]:
+            arr_times_str = arr_times_str + str(el) + ' '
+
+        ride.start = form.cleaned_data['start']
+        ride.end = form.cleaned_data['end']
+        ride.stops = form.cleaned_data['stops']
+        ride.stops_arr = arr_times_str
+        ride.date = form.cleaned_data['date']
+        ride.time_dep = epoch_time_dep
+        ride.time_arr = arr_times[-1]
+        ride.car_model = form.cleaned_data['car_model']
+        ride.car_cap = form.cleaned_data['car_cap']
+        ride.cigs = form.cleaned_data['cigs']
+        ride.pets = form.cleaned_data['pets']
+        ride.price = form.cleaned_data['price']
+        ride.save()
+        
+        return redirect('profil')
+    elif not form.is_valid():
+        form = DriverForm(initial = data)
+        print('invalid form')
+    else:
+        form = DriverForm(initial = data)
+    
+    return render(request, 'edit_driver.html', {'form':form})
+
