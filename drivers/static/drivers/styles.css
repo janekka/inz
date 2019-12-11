@@ -14,6 +14,32 @@ main .container .rides {
   background-color: white;
   padding: 5px;
   margin: 5px;
+  box-shadow: 3px 3px gray;
+}
+main .container .forms {
+  background-color: white;
+  padding: 5px;
+  margin: 5px;
+  box-shadow: 3px 3px gray;
+}
+main .container .forms form input[type=text] {
+  width: 90%;
+  border: 2px solid;
+  border-color: #bf35ff;
+}
+main .container .forms form input[type=number] {
+  border: 2px solid;
+  border-color: #bf35ff;
+}
+main .container .forms form input[type=checkbox] {
+  border: 2px solid;
+  border-color: #bf35ff;
+}
+main .container .forms form button {
+  background-color: #e4aaff;
+  color: white;
+  width: 100%;
+  padding: 10px;
 }
 
 /*# sourceMappingURL=styles.css.map */

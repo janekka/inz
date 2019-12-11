@@ -16,6 +16,42 @@ main {
             background-color: rgb(255, 255, 255);
             padding: 5px;
             margin: 5px;
+            box-shadow: 3px 3px gray;
+        }
+
+        .forms {
+            background-color: rgb(255, 255, 255);
+            padding: 5px;
+            margin: 5px;
+            box-shadow: 3px 3px gray;
+
+            form {
+                
+                input[type=text] {
+                    width: 90%;
+                    border: 2px solid;
+                    border-color: rgb(191, 53, 255);
+                    
+                }
+
+                input[type=number] {
+                    border: 2px solid;
+                    border-color: rgb(191, 53, 255);
+                    
+                }
+                input[type=checkbox] {
+                    border: 2px solid;
+                    border-color: rgb(191, 53, 255);
+                
+                }
+                button {
+                    background-color: rgb(228, 170, 255);
+                    color: white;
+                    width: 100%;
+                    padding: 10px;
+                }
+            }
+            
         }
     }
 }

@@ -14,16 +14,16 @@ class SignUpForm(UserCreationForm):
 
 
 class DriverForm(forms.Form):
-    start = forms.CharField(label='start', max_length=20)
-    end = forms.CharField(label='end', max_length=20)
-    stops = forms.CharField(label='stops', max_length=100, required=False)
-    date = forms.DateField(label='date', input_formats=['%d-%m-%Y', '%d/%m/%Y'])
-    time_dep = forms.TimeField(label='time_dep')
-    car_model = forms.CharField(label='car_model', max_length=50)
-    car_cap = forms.IntegerField(label='car_cap')
-    cigs = forms.BooleanField(label='cigs', required=False)
-    pets = forms.BooleanField(label='pets', required=False)
-    price = forms.FloatField(label='price')
+    start = forms.CharField(label='start', max_length=20, help_text='Skąd jedziesz')
+    end = forms.CharField(label='end', max_length=20, help_text='Dokąd')
+    stops = forms.CharField(label='stops', max_length=100, required=False, help_text='Gdzie możesz się zatrzymać')
+    date = forms.DateField(label='date', input_formats=['%d-%m-%Y', '%d/%m/%Y'], help_text='Kiedy [Dzień/Miesiąc/Rok]')
+    time_dep = forms.TimeField(label='time_dep', help_text='O której godzinie wyjeżdżasz')
+    car_model = forms.CharField(label='car_model', max_length=50, help_text='Jakim autem')
+    car_cap = forms.IntegerField(label='car_cap', help_text='Ilu możesz zabrać pasażerów')
+    cigs = forms.BooleanField(label='cigs', required=False, help_text='Zaznacz jeśli nie pozwalasz palić papierosów w samochodzie')
+    pets = forms.BooleanField(label='pets', required=False, help_text='Zaznacz jeśli nie chcesz przewozić zwierząt')
+    price = forms.FloatField(label='price', help_text='Cena od kilometra')
 
 class PassengerForm(forms.Form):
     start = forms.CharField(label='start', max_length=20)

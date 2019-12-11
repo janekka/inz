@@ -82,6 +82,7 @@ def profile_view(request):
 
 def add_driver_view(request):
     form = DriverForm(request.POST)
+    
     if form.is_valid() and request.user.is_authenticated:
 
         #times = time_to_epoch(form.cleaned_data['date'],form.cleaned_data['time_dep'], (form.cleaned_data['start'],form.cleaned_data['stops'],form.cleaned_data['end']))
