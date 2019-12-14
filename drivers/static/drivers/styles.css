@@ -3,7 +3,7 @@ main {
   flex-direction: column;
   align-items: center;
   background-color: #e4aaff;
-  min-height: 650px;
+  min-height: 100%;
   font-family: "Bookman Old Style";
 }
 main .container {
@@ -23,7 +23,6 @@ main .container .forms {
   box-shadow: 3px 3px gray;
 }
 main .container .forms form input[type=text] {
-  width: 90%;
   border: 2px solid;
   border-color: #bf35ff;
 }

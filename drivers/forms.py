@@ -1,16 +1,25 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=100, help_text='Last Name')
-    last_name = forms.CharField(max_length=100, help_text='Last Name')
-    email = forms.EmailField(max_length=150, help_text='Email')
+    first_name = forms.CharField(max_length=100, help_text='Imię')
+    last_name = forms.CharField(max_length=100, help_text='Nazwisko')
+    email = forms.EmailField(max_length=150, help_text='Adres email')
 
 
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2',)
+
+    def __init__(self, *args, **kwargs):
+        super(SignUpForm, self).__init__(*args, **kwargs)
+
+        
+        self.fields['username'].help_text = 'Nazwa użytkownika'
+        self.fields['password1'].help_text = 'Hasło'
+        self.fields['password2'].help_text = 'Powtórz hasło'
+
 
 
 class DriverForm(forms.Form):
@@ -26,10 +35,10 @@ class DriverForm(forms.Form):
     price = forms.FloatField(label='price', help_text='Cena od kilometra')
 
 class PassengerForm(forms.Form):
-    start = forms.CharField(label='start', max_length=20)
-    end = forms.CharField(label='end', max_length=20)
-    date = forms.DateField(label='date', input_formats=['%d-%m-%Y', '%d/%m/%Y'])
-    time_dep = forms.TimeField(label='time_dep')
-    cigs = forms.BooleanField(label='cigs', required=False)
-    pets = forms.BooleanField(label='pets', required=False)
-    max_cost = forms.FloatField(label='max_cost')
+    start = forms.CharField(label='start', max_length=20, help_text='Skąd jedziesz')
+    end = forms.CharField(label='end', max_length=20, help_text='Dokąd')
+    date = forms.DateField(label='date', input_formats=['%d-%m-%Y', '%d/%m/%Y'], help_text='Kiedy [Dzień/Miesiąc/Rok]')
+    time_dep = forms.TimeField(label='time_dep', help_text='O której chcesz wyjechać')
+    cigs = forms.BooleanField(label='cigs', required=False, help_text='Zaznacz jeśli chcesz palić papierosy w samochodzie')
+    pets = forms.BooleanField(label='pets', required=False, help_text='Zaznacz jeśli jedziesz ze zwierzęciem')
+    max_cost = forms.FloatField(label='max_cost', help_text='Ile możesz maksymalnie zapłacić')

@@ -100,6 +100,7 @@
         <td>{{ obj.date }}</td>
         <td>{{ obj.start }}</td>
         <td>{{ obj.end }}</td>
+        <td><a href="{% url 'edit_passenger' obj.id %}">edytuj</a></td>
       </tr>
     {% endfor %}
     </table>

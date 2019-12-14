@@ -1,6 +1,28 @@
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+<head>
+    {% load static %}
+  <link rel="stylesheet" type= "text/css" href="{% static 'drivers/styles.css' %}">
+</head>
+
+<main>
+  <div class="container">
+    <div class="rides">
+      <h2>Logowanie</h2>
+    </div>
+    <div class="forms">
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <p>
+          {{ field.label_tag }}<br>
+          {{ field }}
+          {% for error in field.errors %}
+            <p style="color: red">{{ error }}</p>
+          {% endfor %}
+          </p>
+          {% endfor %}
+          <button type="submit">Login</button>
+        </form>
+    </div>
+  </div>
+  
+</main>

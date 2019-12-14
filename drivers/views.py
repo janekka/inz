@@ -9,6 +9,8 @@ from calendar import timegm
 from .help_funcs import time_to_epoch
 
 # Create your views here.
+
+
 def home_view(request, *args, **kwargs):
     info = {
         'user':request.user.is_authenticated,
@@ -84,8 +86,6 @@ def add_driver_view(request):
     form = DriverForm(request.POST)
     
     if form.is_valid() and request.user.is_authenticated:
-
-        #times = time_to_epoch(form.cleaned_data['date'],form.cleaned_data['time_dep'], (form.cleaned_data['start'],form.cleaned_data['stops'],form.cleaned_data['end']))
 
         time_string = str(form.cleaned_data['date']) + 'T' + str(form.cleaned_data['time_dep'])
         time_stripped = time.strptime(time_string, '%Y-%m-%dT%H:%M:%S')
@@ -215,3 +215,47 @@ def edit_driver_ride_view(request, id=None):
     
     return render(request, 'edit_driver.html', {'form':form})
 
+def edit_passenger_ride_view(request, id=None):
+
+    ride = get_object_or_404(Passenger, id=id)
+    if ride.username != request.user.username:
+        return HttpResponseForbidden()
+    
+    t = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(ride.time_dep))
+    data = {
+        'start':ride.start,
+        'end':ride.end,
+        'date':t[:10],
+        'time_dep':t[11:16],
+        'cigs':ride.cigs,
+        'pets':ride.pets, 
+        'max_cost':ride.max_cost
+        }
+
+    form = PassengerForm(request.POST)
+    if form.is_valid() and request.POST:
+
+        distance = get_distance((form.cleaned_data['start'],form.cleaned_data['end']))
+        time_string = str(form.cleaned_data['date']) + 'T' + str(form.cleaned_data['time_dep'])
+        print(time_string)
+        time_stripped = time.strptime(time_string, '%Y-%m-%dT%H:%M:%S')
+        epoch_time_dep = timegm(time_stripped)
+        print(epoch_time_dep)
+
+        ride.start = form.cleaned_data['start']
+        ride.end = form.cleaned_data['end']
+        ride.distance = distance[0]/1000
+        ride.date = form.cleaned_data['date']
+        ride.time_dep = epoch_time_dep
+        ride.time_arr = epoch_time_dep+distance[1]
+        ride.cigs = form.cleaned_data['cigs']
+        ride.pets = form.cleaned_data['pets']
+        ride.max_cost = form.cleaned_data['max_cost']
+        ride.save()
+        return redirect('profil')
+    elif not form.is_valid():
+        form = PassengerForm(initial = data)
+    else:
+        form = PassengerForm(initial = data)
+    return render(request, 'edit_passenger.html', {'form':form})
+    

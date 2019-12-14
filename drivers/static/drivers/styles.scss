@@ -5,7 +5,7 @@ main {
     flex-direction: column;
     align-items: center;
     background-color:rgb(228, 170, 255);
-    min-height: 650px;
+    min-height: 100%;
     font-family: "Bookman Old Style";
 
     .container {
@@ -28,7 +28,6 @@ main {
             form {
                 
                 input[type=text] {
-                    width: 90%;
                     border: 2px solid;
                     border-color: rgb(191, 53, 255);
                     
