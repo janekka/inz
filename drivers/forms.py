@@ -20,6 +20,29 @@ class SignUpForm(UserCreationForm):
         self.fields['password1'].help_text = 'Hasło'
         self.fields['password2'].help_text = 'Powtórz hasło'
 
+class EditProfileForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=100, help_text='Imię')
+    last_name = forms.CharField(max_length=100, help_text='Nazwisko')
+    email = forms.EmailField(max_length=150, help_text='Adres email')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name')
+
+    def __init__(self, c_user, *args, **kwargs):
+        super(EditProfileForm, self).__init__(*args, **kwargs)
+        self.c_user = c_user 
+        self.fields['username'].help_text = 'Nazwa użytkownika'
+
+    def clean_email(self):
+        username = self.c_user
+        email = self.cleaned_data.get('email')
+
+        if email and User.objects.filter(email=email).exclude(username=username).count():
+            raise forms.ValidationError('This email address is already in use. Please supply a different email address.')
+        return email
+
+
 
 
 class DriverForm(forms.Form):

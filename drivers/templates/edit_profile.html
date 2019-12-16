@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ form.errors }}
+{{ form.non_field_errors }}
+<div class="container">
+  <div class="rides">
+    <h2>Edytuj swóje dane</h2>
+  </div>
+  
+  <div class="forms">
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+          <p>
+            {{ field.help_text }}<br>
+            {{ field }}
+            {% for error in field.errors %}
+              <p style="color: red">{{ error }}</p>
+            {% endfor %}
+          </p>
+        {% endfor %}
+        <button type="submit">Zapisz zmiany</button>
+      </form>
+  </div>
+  
+</div>
+
+{% endblock %}

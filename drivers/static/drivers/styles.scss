@@ -5,12 +5,12 @@ main {
     flex-direction: column;
     align-items: center;
     background-color:rgb(228, 170, 255);
-    min-height: 100%;
     font-family: "Bookman Old Style";
 
     .container {
         padding: 2px;
         margin: 5px;
+        min-height: 100vh;
 
         .rides {
             background-color: rgb(255, 255, 255);

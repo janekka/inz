@@ -12,5 +12,6 @@ urlpatterns = [
     path('', views.home_view, name='home'),
     path('', include('django.contrib.auth.urls')),
     path('edit_driver/<int:id>', views.edit_driver_ride_view, name='edit_driver'),
-    path('edit_passenger/<int:id>', views.edit_passenger_ride_view, name='edit_passenger')
+    path('edit_passenger/<int:id>', views.edit_passenger_ride_view, name='edit_passenger'),
+    path('edit_profile/', views.edit_profile_view, name='edit_profile')
 ]

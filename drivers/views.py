@@ -1,7 +1,8 @@
 from django.contrib.auth import login, authenticate
-from .forms import SignUpForm, DriverForm, PassengerForm
+from .forms import SignUpForm, DriverForm, PassengerForm, EditProfileForm
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Ride, Driver, Passenger
+from .models import Ride, Driver, Passenger, Profile
+from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseForbidden
 from .google_maps import get_distance, get_arrivals
 import time
@@ -12,10 +13,14 @@ from .help_funcs import time_to_epoch
 
 
 def home_view(request, *args, **kwargs):
+        
     info = {
         'user':request.user.is_authenticated,
         'username':request.user.username
     }
+    if request.user.is_authenticated:
+        info['first_name'] = request.user.first_name
+    
     return render(request, 'home.html', info)
 
 def signup_view(request):
@@ -258,4 +263,47 @@ def edit_passenger_ride_view(request, id=None):
     else:
         form = PassengerForm(initial = data)
     return render(request, 'edit_passenger.html', {'form':form})
+
+def edit_profile_view(request):
+    user = get_object_or_404(User, username=request.user.username)
+    rides_d = Ride.objects.filter(driver_username=request.user.username)
+    rides_p = Ride.objects.filter(passenger_username=request.user.username)
+    passenger = Passenger.objects.filter(username=request.user.username)
+    print(len(passenger))
+    driver = Driver.objects.filter(username=request.user.username)
+        
+    form = EditProfileForm(request.user.username, request.POST, instance=request.user)
+    if request.POST and form.is_valid():
+        for el in rides_d:
+            el.driver_username = form.cleaned_data['username']
+            el.save()
+
+        for el in rides_p:
+            el.passenger_username = form.cleaned_data['username']
+            el.save()
+
+        for el in passenger:
+            el.username = form.cleaned_data['username']
+            print('TU')
+            el.save()
+
+        for el in driver:
+            el.username = form.cleaned_data['username']
+            el.save()
+        user.username = form.cleaned_data['username']
+        user.email = form.cleaned_data['email']
+        user.first_name = form.cleaned_data['first_name']
+        user.profile.first_name = form.cleaned_data['first_name']
+        user.last_name = form.cleaned_data['last_name']
+        user.save()
+
+        
+        return redirect('home')
+    elif not form.is_valid():
+        print(form.errors)
+        form = EditProfileForm(request.user.username, instance=request.user)
+        
+    else:
+        form = EditProfileForm(request.user.username, instance=request.user)
+    return render(request, 'edit_profile.html', {'form':form})
     
