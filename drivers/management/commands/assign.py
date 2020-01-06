@@ -1,15 +1,17 @@
 from django.core.management.base import BaseCommand, CommandError
-from drivers.models import Driver, Passenger, Ride
+from drivers.models import Driver, Passenger, Ride, Driver_hist, Passenger_hist, Ride_hist
 import numpy as np
 from lpsolve55 import *
 from lp_solve import *
+import datetime
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
 
+        ride_date = (datetime.datetime.now() + datetime.timedelta(days=2)).date()
 #import danych z bazy
-        drs = Driver.objects.all()
-        ps = Passenger.objects.all()
+        drs = Driver.objects.filter(date=ride_date)
+        ps = Passenger.objects.filter(date=ride_date)
         #print(type(drs[1]))
 
 #wspolczynniki funkcji celu
@@ -165,3 +167,22 @@ class Command(BaseCommand):
                     ride = Ride(driver_username=drs[j].username, passenger_username=ps[i].username, date=drs[j].date, pick_up=ps[i].start, drop_off=ps[i].end, driver_ride_id=driver_obj, passenger_ride_id=passenger_obj)
                     ride.save()
                     print('passenger ' + ps[i].username + 'rides with driver ' + drs[j].username)
+
+#porzadkowanie bazy danych
+        ps_obj = Passenger.objects.filter(date__lt=datetime.date.today())
+        for i in range(len(ps_obj)):
+            ps_hist = Passenger_hist(username=ps_obj[i].username, start=ps_obj[i].start, end=ps_obj[i].end, distance=ps_obj[i].distance, date=ps_obj[i].date, time_dep=ps_obj[i].time_dep, time_arr=ps_obj[i].time_arr, cigs=ps_obj[i].cigs, pets=ps_obj[i].pets, max_cost=ps_obj[i].max_cost)    
+            ps_hist.save()
+            ps_obj[i].delete()
+
+        drs_obj = Driver.objects.filter(date__lt=datetime.date.today())
+        for j in range(len(drs_obj)):
+            drs_hist = Driver_hist(username=drs_obj[j].username, start=drs_obj[j].start, end=drs_obj[j].end, stops=drs_obj[j].stops, stops_arr=drs_obj[j].stops_arr, date=drs_obj[j].date, time_dep=drs_obj[j].time_dep, time_arr=drs_obj[j].time_arr, car_model=drs_obj[j].car_model, car_cap=drs_obj[j].car_cap, cigs=drs_obj[j].cigs, pets=drs_obj[j].pets, price=drs_obj[j].price)    
+            drs_hist.save()
+            drs_obj[j].delete()
+        
+        ride_obj = Ride.objects.filter(date__lt=datetime.date.today())
+        for i in range(len(ride_obj)):
+            ride_hist = Ride_hist(driver_username=ride_obj[i].driver_username, passenger_username=ride_obj[i].passenger_username, date=ride_obj[i].date, pick_up=ride_obj[i].pick_up, drop_off=ride_obj[i].drop_off)    
+            ride_hist.save()
+            ride_obj[i].delete()

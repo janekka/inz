@@ -82,7 +82,8 @@
   
 {% else %}
   <div class="rides">
-    <h4>Nie ogłosiłeś żadnego przejazdu jako kierowca</h4>
+    <h4>Nie ogłosiłeś żadnego przejazdu jako kierowca</h4><br>
+    <a href="{% url 'add_driver' %}">Dodaj</a>
   </div>
 {% endif %}
 
@@ -108,7 +109,8 @@
   
 {% else %}
   <div class="rides">
-    <h4>Nie ogłosiłeś żadnego przejazdu jako pasażer</h4>
+    <h4>Nie ogłosiłeś żadnego przejazdu jako pasażer</h4><br>
+    <a href="{% url 'add_passenger' %}">Dodaj</a>
   </div>
 {% endif %}
 </div>
