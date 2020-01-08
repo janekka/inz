@@ -12,9 +12,28 @@
   </head>
   <body>
     <header>
+      {% block nav %}
+      <nav>
+        <ul id=nav>
+          <li><a href="{% url 'home' %}">Strona Główna</a></li>
+          <li><a href="{% url 'add_driver' %}">Kierowca</a></li>
+          <li><a href="{% url 'add_passenger' %}">Pasażer</a></li>
+          {% if user %}
+          <li><a href="{% url 'profil' %}">Przejazdy</a></li>
+          <li><a href="{% url 'edit_profile' %}">Edytuj dane</a></li>
+          <li><a href="{% url 'logout' %}">Wyloguj się</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Logowanie</a></li>
+          <li><a href="{% url 'rejestracja' %}">Rejestracja</a></li>
+        {% endif %}
+        
+        </ul>
+      </nav>
+      {% endblock %}      
 
     </header>
-    <main>    
+    <main>
+    
       {% block content %}
       {% endblock %}
     </main>

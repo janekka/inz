@@ -306,4 +306,39 @@ def edit_profile_view(request):
     else:
         form = EditProfileForm(request.user.username, instance=request.user)
     return render(request, 'edit_profile.html', {'form':form})
-    
+
+def delete_passenger_view(request, id = None):
+    if request.user.is_authenticated:
+        passenger = get_object_or_404(Passenger, id=id)
+        info = {'ride':passenger, 'who':'pasażer'}
+        passenger.delete()
+        return render(request, 'delete.html', info)
+    else:
+        redirect('home')
+
+def delete_driver_view(request, id = None):
+    if request.user.is_authenticated:
+        driver = get_object_or_404(Driver, id=id)
+        info = {'ride':driver, 'who':'kierowca'}
+        driver.delete()
+        return render(request, 'delete.html', info)
+    else:
+        redirect('home')
+
+def delete_p_ride_view(request, id = None):
+    if request.user.is_authenticated:
+        ride = get_object_or_404(Ride, ride_id=id)
+        info = {'ride':ride, 'who':'pasażer'}
+        ride.delete()
+        return render(request, 'delete.html', info)
+    else:
+        redirect('home')
+
+def delete_d_ride_view(request, id = None):
+    if request.user.is_authenticated:
+        ride = get_object_or_404(Ride, ride_id=id)
+        info = {'ride':ride, 'who':'kierowca'}
+        ride.delete()
+        return render(request, 'delete.html', info)
+    else:
+        redirect('home')

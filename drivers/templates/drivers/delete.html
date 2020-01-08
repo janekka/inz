@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="rides">
+    <h4>Usunięto przejazd jako {{ who }}</h4>
+  </div>
+  <div class="rides">
+    <table>
+      <tr>
+        <th>Data</th>
+        <th>Skąd</th>
+        <th>Dokąd</th>
+      </tr>
+      <tr>
+        <td>{{ ride.date }}</td>
+        {% if ride.start %}
+        <td>{{ ride.start }}</td>
+        {% endif %}
+        {% if ride.end %}
+        <td>{{ ride.end }}</td>
+        {% endif %}
+        {% if ride.pick_up %}
+        <td>{{ ride.pick_up }}</td>
+        {% endif %}
+        {% if ride.drop_off %}
+        <td>{{ ride.drop_off }}</td>
+        {% endif %}
+      </tr>
+    </table>
+  </div>
+  
+</div>
+
+{% endblock %}

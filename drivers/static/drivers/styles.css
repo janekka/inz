@@ -1,3 +1,18 @@
+header nav {
+  background-color: #2fc91a;
+  height: 60px;
+}
+header nav ul {
+  display: flex;
+  display: block;
+  text-align: center;
+}
+header nav ul li {
+  margin: 20px;
+  list-style: none;
+  display: inline-block;
+}
+
 main {
   display: flex;
   flex-direction: column;

@@ -20,6 +20,7 @@
         <td>{{ obj.passenger_username }}</td>
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
+        <td><a href="{% url 'delete_d_ride' obj.ride_id %}">usuń</a></td>
       </tr>
     {% endfor %}
     </table>
@@ -46,6 +47,7 @@
         <td>{{ obj.driver_username }}</td>
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
+        <td><a href="{% url 'delete_p_ride' obj.ride_id %}">usuń</a></td>
       </tr>
       {% endfor %}
     </table>
@@ -75,6 +77,7 @@
         <td>{{ obj.end }}</td>
         <td>{{ obj.stops }}</td>
         <td><a href="{% url 'edit_driver' obj.id %}">edytuj</a></td>
+        <td><a href="{% url 'delete_driver' obj.id %}">usuń</a></td>
       </tr>
     {% endfor %}
     </table>
@@ -102,6 +105,7 @@
         <td>{{ obj.start }}</td>
         <td>{{ obj.end }}</td>
         <td><a href="{% url 'edit_passenger' obj.id %}">edytuj</a></td>
+        <td><a href="{% url 'delete_passenger' obj.id %}">usuń</a></td>
       </tr>
     {% endfor %}
     </table>

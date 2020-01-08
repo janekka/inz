@@ -1,4 +1,23 @@
 
+header {
+    nav {
+        background-color:rgb(47, 201, 26);
+        height: 60px;
+
+        ul {
+            display: flex;
+            display: block;
+            text-align: center;
+
+            li {
+                margin: 20px;
+                list-style: none;
+                display: inline-block;
+            }
+        }
+        
+    }
+}
 
 main {
     display: flex;
@@ -6,6 +25,8 @@ main {
     align-items: center;
     background-color:rgb(228, 170, 255);
     font-family: "Bookman Old Style";
+    
+    
 
     .container {
         padding: 2px;

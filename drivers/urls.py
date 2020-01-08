@@ -13,5 +13,9 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('edit_driver/<int:id>', views.edit_driver_ride_view, name='edit_driver'),
     path('edit_passenger/<int:id>', views.edit_passenger_ride_view, name='edit_passenger'),
-    path('edit_profile/', views.edit_profile_view, name='edit_profile')
+    path('edit_profile/', views.edit_profile_view, name='edit_profile'),
+    path('delete_passenger/<int:id>', views.delete_passenger_view, name='delete_passenger'),
+    path('delete_driver/<int:id>', views.delete_driver_view, name='delete_driver'),
+    path('delete_p_ride/<int:id>', views.delete_p_ride_view, name='delete_p_ride'),
+    path('delete_d_ride/<int:id>', views.delete_d_ride_view, name='delete_d_ride')
 ]
