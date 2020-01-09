@@ -1,9 +1,6 @@
-<head>
-    {% load static %}
-  <link rel="stylesheet" type= "text/css" href="{% static 'drivers/styles.css' %}">
-</head>
+{% extends 'base.html' %}
 
-<main>
+{% block content %}
   <div class="container">
     <div class="rides">
       <h2>Logowanie</h2>
@@ -24,5 +21,6 @@
         </form>
     </div>
   </div>
+  {{user  }}
   
-</main>
+{% endblock %}

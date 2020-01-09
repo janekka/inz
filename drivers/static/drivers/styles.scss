@@ -1,7 +1,8 @@
 
 header {
+    font-family: "Bookman Old Style";
     nav {
-        background-color:rgb(47, 201, 26);
+        background-color:rgb(177, 163, 255);
         height: 60px;
 
         ul {
@@ -10,9 +11,22 @@ header {
             text-align: center;
 
             li {
-                margin: 20px;
+                //margin: 20px;
                 list-style: none;
                 display: inline-block;
+
+                a {
+                    text-decoration: none;
+                    height: 60px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding-left: 10px;
+                    padding-right: 10px;
+                }
+                a:hover {
+                    background: rgb(228, 170, 255);
+                }
             }
         }
         
@@ -38,6 +52,8 @@ main {
             padding: 5px;
             margin: 5px;
             box-shadow: 3px 3px gray;
+            text-align: center;
+            min-width: 45vh;
         }
 
         .forms {
@@ -51,6 +67,14 @@ main {
                 input[type=text] {
                     border: 2px solid;
                     border-color: rgb(191, 53, 255);
+                    width: 95%;
+                    
+                }
+
+                input[type=password] {
+                    border: 2px solid;
+                    border-color: rgb(191, 53, 255);
+                    width: 95%;
                     
                 }
 

@@ -1,5 +1,8 @@
+header {
+  font-family: "Bookman Old Style";
+}
 header nav {
-  background-color: #2fc91a;
+  background-color: #b1a3ff;
   height: 60px;
 }
 header nav ul {
@@ -8,9 +11,20 @@ header nav ul {
   text-align: center;
 }
 header nav ul li {
-  margin: 20px;
   list-style: none;
   display: inline-block;
+}
+header nav ul li a {
+  text-decoration: none;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+header nav ul li a:hover {
+  background: #e4aaff;
 }
 
 main {
@@ -30,6 +44,8 @@ main .container .rides {
   padding: 5px;
   margin: 5px;
   box-shadow: 3px 3px gray;
+  text-align: center;
+  min-width: 45vh;
 }
 main .container .forms {
   background-color: white;
@@ -40,6 +56,12 @@ main .container .forms {
 main .container .forms form input[type=text] {
   border: 2px solid;
   border-color: #bf35ff;
+  width: 95%;
+}
+main .container .forms form input[type=password] {
+  border: 2px solid;
+  border-color: #bf35ff;
+  width: 95%;
 }
 main .container .forms form input[type=number] {
   border: 2px solid;

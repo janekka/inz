@@ -14,10 +14,7 @@ from .help_funcs import time_to_epoch
 
 def home_view(request, *args, **kwargs):
         
-    info = {
-        'user':request.user.is_authenticated,
-        'username':request.user.username
-    }
+    info = {}
     if request.user.is_authenticated:
         info['first_name'] = request.user.first_name
     

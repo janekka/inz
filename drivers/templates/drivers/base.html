@@ -16,9 +16,9 @@
       <nav>
         <ul id=nav>
           <li><a href="{% url 'home' %}">Strona Główna</a></li>
+        {% if user.is_authenticated %}
           <li><a href="{% url 'add_driver' %}">Kierowca</a></li>
           <li><a href="{% url 'add_passenger' %}">Pasażer</a></li>
-          {% if user %}
           <li><a href="{% url 'profil' %}">Przejazdy</a></li>
           <li><a href="{% url 'edit_profile' %}">Edytuj dane</a></li>
           <li><a href="{% url 'logout' %}">Wyloguj się</a></li>

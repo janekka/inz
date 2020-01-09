@@ -6,26 +6,34 @@
     <title>Home</title>
 </head>
   <body>
+    {% block content %}
     <div class="container">
 
-        {% block content %}
-        {% if user %}
-          Witaj {{ username }}!
-          {{ first_name }}
-          <p><a href="{% url 'logout' %}">Wyloguj się</a></p><br>
-          <p><a href="{% url 'profil' %}">przejazdy</a></p><br>
-          <p><a href="{% url 'edit_profile' %}">edytuj profil</a></p>
-        {% else %}
-          <p>You are not logged in</p>
-          <a href="{% url 'login' %}">Logowanie</a> <br>
-          <a href="{% url 'rejestracja' %}">Rejestracja</a> <br>
+        
+        <div class="rides">
+          <h1>Carpooling</h1>
+        </div>
+        {% if user.is_authenticated %}
+        <div class="rides">
+          <p>Witaj {{ first_name }}!</p>
+          
+          <p>Zobacz swoje <a href="{% url 'profil' %}">przejazdy</a></p><br>
+          <p>lub</p><br>
+          <p>zgłoś przejazd jako <a href="{% url 'add_driver' %}">kierowca</a> albo <a href="{% url 'add_passenger' %}">pasażer</a></p>
+        </div>
+          {% else %}
+          <div class="rides">
+          <p>Nie jesteś zalogowany</p><br>
+          <a href="{% url 'login' %}">Zaloguj się</a> <br>
+          <p>lub</p>
+          <a href="{% url 'rejestracja' %}">Załóż konto</a> <br>
+          <p>aby moć dodawać przejazdy</p>
+        </div>
         {% endif %}
-        {% endblock %}
 
-
-    {% block body_block %}
-    {{user}}
+        {{user  }}
     {% endblock %}
+
     </div>
   </body>
 </html>
