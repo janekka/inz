@@ -47,6 +47,19 @@ main .container .rides {
   text-align: center;
   min-width: 45vh;
 }
+main .container .rides table {
+  border-collapse: collapse;
+  width: 100%;
+}
+main .container .rides table td, main .container .rides table th {
+  border-right: solid;
+  border-color: #d1d1d1;
+  border-width: 2px;
+  padding: 3px;
+}
+main .container .rides table td:last-child {
+  border: none;
+}
 main .container .forms {
   background-color: white;
   padding: 5px;

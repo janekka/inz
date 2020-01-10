@@ -164,7 +164,7 @@ class Command(BaseCommand):
                 if assign[i][j] == 1:
                     driver_obj = Driver.objects.get(id=drs[j].id)
                     passenger_obj = Passenger.objects.get(id=ps[i].id)
-                    ride = Ride(driver_username=drs[j].username, passenger_username=ps[i].username, date=drs[j].date, pick_up=ps[i].start, drop_off=ps[i].end, driver_ride_id=driver_obj, passenger_ride_id=passenger_obj)
+                    ride = Ride(driver_username=drs[j].username, passenger_username=ps[i].username, date=drs[j].date, pick_up=ps[i].start, drop_off=ps[i].end, driver_ride_id=driver_obj, passenger_ride_id=passenger_obj, car_model=drs[j].car_model)
                     ride.save()
                     print('passenger ' + ps[i].username + 'rides with driver ' + drs[j].username)
 
@@ -183,6 +183,6 @@ class Command(BaseCommand):
         
         ride_obj = Ride.objects.filter(date__lt=datetime.date.today())
         for i in range(len(ride_obj)):
-            ride_hist = Ride_hist(driver_username=ride_obj[i].driver_username, passenger_username=ride_obj[i].passenger_username, date=ride_obj[i].date, pick_up=ride_obj[i].pick_up, drop_off=ride_obj[i].drop_off)    
+            ride_hist = Ride_hist(driver_username=ride_obj[i].driver_username, passenger_username=ride_obj[i].passenger_username, date=ride_obj[i].date, pick_up=ride_obj[i].pick_up, drop_off=ride_obj[i].drop_off, car_model=drs[j].car_model)    
             ride_hist.save()
             ride_obj[i].delete()

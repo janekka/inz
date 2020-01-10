@@ -10,7 +10,7 @@
     <table>
       <tr>
         <th>Data</th>
-        <th>Użytkownik</th>
+        <th>Pasażer</th>
         <th>Skąd</th>
         <th>Dokąd</th>
       </tr>
@@ -37,7 +37,8 @@
     <table>
       <tr>
         <th>Data</th>
-        <th>Użytkownik</th>
+        <th>Kierowca</th>
+        <th>Auto</th>
         <th>Skąd</th>
         <th>Dokąd</th>
       </tr>
@@ -45,6 +46,7 @@
       <tr>
         <td>{{ obj.date }}</td>
         <td>{{ obj.driver_username }}</td>
+        <td>{{ obj.car_model }}</td>
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
         <td><a href="{% url 'delete_p_ride' obj.ride_id %}">usuń</a></td>

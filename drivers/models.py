@@ -79,6 +79,7 @@ class Ride(models.Model):
     date = models.DateField()
     pick_up = models.TextField()
     drop_off = models.TextField()
+    car_model = models.TextField(default="car")
 
 class Ride_hist(models.Model):
     ride_id = models.AutoField(primary_key=True)
@@ -87,6 +88,7 @@ class Ride_hist(models.Model):
     date = models.DateField()
     pick_up = models.TextField()
     drop_off = models.TextField()
+    car_model = models.TextField(default="car")
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)

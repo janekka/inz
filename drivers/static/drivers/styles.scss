@@ -54,6 +54,22 @@ main {
             box-shadow: 3px 3px gray;
             text-align: center;
             min-width: 45vh;
+
+            table {
+                border-collapse: collapse;
+                width: 100%;
+
+                td, th {
+                    border-right: solid;
+                    border-color: rgb(209, 209, 209);
+                    border-width: 2px;
+                    padding: 3px;
+                }
+
+                td:last-child {
+                    border: none;
+                }
+            }
         }
 
         .forms {
