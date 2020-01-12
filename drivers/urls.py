@@ -17,5 +17,6 @@ urlpatterns = [
     path('delete_passenger/<int:id>', views.delete_passenger_view, name='delete_passenger'),
     path('delete_driver/<int:id>', views.delete_driver_view, name='delete_driver'),
     path('delete_p_ride/<int:id>', views.delete_p_ride_view, name='delete_p_ride'),
-    path('delete_d_ride/<int:id>', views.delete_d_ride_view, name='delete_d_ride')
+    path('delete_d_ride/<int:id>', views.delete_d_ride_view, name='delete_d_ride'),
+    path('ride_chat/<int:id>', views.ride_chat_view, name='ride_chat'),
 ]

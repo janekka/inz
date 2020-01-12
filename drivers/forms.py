@@ -65,3 +65,6 @@ class PassengerForm(forms.Form):
     cigs = forms.BooleanField(label='cigs', required=False, help_text='Zaznacz jeśli chcesz palić papierosy w samochodzie')
     pets = forms.BooleanField(label='pets', required=False, help_text='Zaznacz jeśli jedziesz ze zwierzęciem')
     max_cost = forms.FloatField(label='max_cost', help_text='Ile możesz maksymalnie zapłacić')
+
+class MessageForm(forms.Form):
+    message = forms.CharField(label='message', max_length=1000)

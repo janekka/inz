@@ -50,6 +50,7 @@
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
         <td><a href="{% url 'delete_p_ride' obj.ride_id %}">usuń</a></td>
+        <td><a href="{% url 'ride_chat' obj.driver_ride_id_id %}">chat</a></td>
       </tr>
       {% endfor %}
     </table>

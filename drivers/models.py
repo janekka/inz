@@ -105,3 +105,13 @@ def update_profile_signal(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
+
+class Message(models.Model):
+    id = models.AutoField(primary_key=True)
+    user = models.TextField()
+    date_created = models.DateTimeField()
+    date_modified = models.DateTimeField(blank = True, null=True)
+    driver_ride_id = models.ForeignKey(Driver, on_delete=models.CASCADE)
+    message = models.TextField()
+
+    

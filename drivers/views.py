@@ -1,11 +1,12 @@
 from django.contrib.auth import login, authenticate
-from .forms import SignUpForm, DriverForm, PassengerForm, EditProfileForm
+from .forms import SignUpForm, DriverForm, PassengerForm, EditProfileForm, MessageForm
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Ride, Driver, Passenger, Profile
+from .models import Ride, Driver, Passenger, Profile, Message
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseForbidden
 from .google_maps import get_distance, get_arrivals
 import time
+import datetime
 from calendar import timegm
 from .help_funcs import time_to_epoch
 
@@ -339,3 +340,32 @@ def delete_d_ride_view(request, id = None):
         return render(request, 'delete.html', info)
     else:
         redirect('home')
+
+def ride_chat_view(request, id = None):
+    form = MessageForm(request.POST)
+    messages = Message.objects.filter(driver_ride_id=id)
+    msg_list = []
+    for msg in messages:
+        msg_list.append(msg.message)
+
+        info = {}
+    info['messages'] = msg_list
+    if request.user.is_authenticated and request.POST and form.is_valid():
+        print('tuuuuuuuu')
+        msg = Message()
+        msg.date_created = datetime.datetime.now()
+        msg.driver_ride_id = get_object_or_404(Driver, id=id)
+        msg.user = request.user.username
+        msg.message = form.cleaned_data['message']
+        msg.save()
+        #path = 'ride_chat/'+str(id)
+        return redirect('/drivers/ride_chat/7')
+    elif request.user.is_authenticated:
+        print('xdddddddd')
+        form = MessageForm()
+        path = 'ride_chat/'+str(id)
+        info['form'] = form
+       # return redirect(path)
+    else:
+        redirect('home')
+    return render(request, 'chat.html', info)
