@@ -70,6 +70,52 @@ main {
                     border: none;
                 }
             }
+
+            .message {
+                text-align: left;
+                padding: 1px;
+                margin: 1px;
+                background-color: rgb(238, 235, 255);
+                width: 100vh;
+                resize: none;
+
+                .msg_detail_d {
+                    font-size: 75%;
+
+                    p {
+                        color: red;
+                    }
+                }
+
+                .msg_detail_p {
+                    font-size: 75%;
+                    
+                }
+            }
+            .msg_form {
+                background-color: rgb(238, 235, 255);
+                padding: 1px;
+                margin: 1px;
+
+                form {
+
+                    textarea {
+                        border: 2px solid;
+                        border-color: rgb(191, 53, 255);
+                        width: 97%;
+                        height: 100px;
+                        resize: vertical;
+                        
+                    }
+
+                    button {
+                        background-color: rgb(228, 170, 255);
+                        color: white;
+                        width: 100%;
+                        padding: 10px;
+                    }
+                }
+            }
         }
 
         .forms {

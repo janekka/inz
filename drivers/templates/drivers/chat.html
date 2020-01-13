@@ -1,9 +1,42 @@
-{% for message in messages %}
-    <p>{{ message }}</p>
-{% endfor %}
+{% extends 'base.html' %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit">
-</form>
+{% block content %}
+
+<div class="container">
+    <div class="rides">
+        <h1>Chat wspólnej podróży</h1>
+        <p>Możecie tutaj ustalić szczegóły podróży</p>
+    </div>
+    <div class="rides">
+        {% for message in messages %}
+        <div class="message">
+            {% if message.1 %}
+            <div class="msg_detail_d">
+                <p>{{ message.0 }} {{message.2}}</p>
+            </div>
+            {% else %}
+            <div class="msg_detail_p">
+                <p>{{ message.0 }} {{message.2}}</p>
+            </div>
+            {% endif %}
+            <p>{{ message.3 }}</p>
+        </div>
+        {% endfor %}
+        
+        <div class="msg_form">
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                  <p>
+                    {{ field }}
+                  </p>
+                {% endfor %}
+                <button type="submit">wyślij wiadomość</button>
+              </form>
+        </div>
+        
+    </div>
+    
+</div>
+
+{% endblock %}

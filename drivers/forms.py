@@ -67,4 +67,4 @@ class PassengerForm(forms.Form):
     max_cost = forms.FloatField(label='max_cost', help_text='Ile możesz maksymalnie zapłacić')
 
 class MessageForm(forms.Form):
-    message = forms.CharField(label='message', max_length=1000)
+    message = forms.CharField(label='message', max_length=1000, widget=forms.Textarea)

@@ -344,26 +344,34 @@ def delete_d_ride_view(request, id = None):
 def ride_chat_view(request, id = None):
     form = MessageForm(request.POST)
     messages = Message.objects.filter(driver_ride_id=id)
-    msg_list = []
-    for msg in messages:
-        msg_list.append(msg.message)
-
-        info = {}
-    info['messages'] = msg_list
+    msgs = []
+    drvr = get_object_or_404(Driver, id=id)
+    for i in range(len(messages)):
+        msg = []
+        msg.append(messages[i].user)                        # 0 - user
+        if messages[i].user == drvr.username:
+            msg.append(True)                                # 1 - if driver
+        else:
+            msg.append(False)
+        date = str(messages[i].date_created)                # 2 - date
+        msg.append(date[:16])
+        msg.append(messages[i].message)                     # 3 - message
+        msgs.append(msg)
+    info = {}
+    info['messages'] = msgs
     if request.user.is_authenticated and request.POST and form.is_valid():
-        print('tuuuuuuuu')
+        #print('tuuuuuuuu')
         msg = Message()
         msg.date_created = datetime.datetime.now()
         msg.driver_ride_id = get_object_or_404(Driver, id=id)
         msg.user = request.user.username
         msg.message = form.cleaned_data['message']
         msg.save()
-        #path = 'ride_chat/'+str(id)
-        return redirect('/drivers/ride_chat/7')
+        path = '/drivers/ride_chat/'+str(id)
+        return redirect(path)
     elif request.user.is_authenticated:
-        print('xdddddddd')
+        #print('xdddddddd')
         form = MessageForm()
-        path = 'ride_chat/'+str(id)
         info['form'] = form
        # return redirect(path)
     else:

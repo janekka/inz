@@ -60,6 +60,41 @@ main .container .rides table td, main .container .rides table th {
 main .container .rides table td:last-child {
   border: none;
 }
+main .container .rides .message {
+  text-align: left;
+  padding: 1px;
+  margin: 1px;
+  background-color: #eeebff;
+  width: 100vh;
+  resize: none;
+}
+main .container .rides .message .msg_detail_d {
+  font-size: 75%;
+}
+main .container .rides .message .msg_detail_d p {
+  color: red;
+}
+main .container .rides .message .msg_detail_p {
+  font-size: 75%;
+}
+main .container .rides .msg_form {
+  background-color: #eeebff;
+  padding: 1px;
+  margin: 1px;
+}
+main .container .rides .msg_form form textarea {
+  border: 2px solid;
+  border-color: #bf35ff;
+  width: 97%;
+  height: 100px;
+  resize: vertical;
+}
+main .container .rides .msg_form form button {
+  background-color: #e4aaff;
+  color: white;
+  width: 100%;
+  padding: 10px;
+}
 main .container .forms {
   background-color: white;
   padding: 5px;
