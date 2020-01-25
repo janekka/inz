@@ -8,11 +8,12 @@ from django.dispatch import receiver
 
 class Driver(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.TextField(default='noname')
+    #username = models.TextField(default='noname')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start = models.TextField()
     end = models.TextField()
-    stops = models.TextField()
-    stops_arr = models.TextField(default='')
+    stops = models.TextField(null=True, blank=True)
+    stops_arr = models.TextField(default='', null=True, blank=True)
     date = models.DateField()
     time_dep = models.FloatField()
     time_arr = models.FloatField()
@@ -22,12 +23,11 @@ class Driver(models.Model):
     pets = models.BooleanField()
     price = models.FloatField()
 
-    def __str__(self):
-        return str(self.username)
+  
 
 class Driver_hist(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.TextField(default='noname')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start = models.TextField()
     end = models.TextField()
     stops = models.TextField()
@@ -43,7 +43,8 @@ class Driver_hist(models.Model):
 
 class Passenger(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.TextField(default='noname')
+    #username = models.TextField(default='noname')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start = models.TextField()
     end = models.TextField()
     distance = models.FloatField()
@@ -54,12 +55,11 @@ class Passenger(models.Model):
     pets = models.BooleanField()
     max_cost = models.FloatField()
 
-    def __str__(self):
-        return str(self.username)
+    
 
 class Passenger_hist(models.Model):
     id = models.AutoField(primary_key=True)
-    username = models.TextField(default='noname')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start = models.TextField()
     end = models.TextField()
     distance = models.FloatField()
@@ -76,6 +76,8 @@ class Ride(models.Model):
     passenger_ride_id = models.ForeignKey(Passenger, on_delete=models.CASCADE)
     driver_username = models.TextField(default='noname')
     passenger_username = models.TextField(default='noname')
+    #driver_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    #passenger_user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     pick_up = models.TextField()
     drop_off = models.TextField()

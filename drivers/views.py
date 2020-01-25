@@ -22,6 +22,8 @@ def home_view(request, *args, **kwargs):
     return render(request, 'home.html', info)
 
 def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     form = SignUpForm(request.POST)
     if form.is_valid():
         user = form.save()
@@ -40,11 +42,30 @@ def signup_view(request):
     return render(request, 'signup.html', {'form': form})
 
 def profile_view(request):
+    if request.session.get('delete_visited') == True:
+        del request.session['delete_visited']
+        print('delete visited')
+        return redirect('profil')
     if request.user.is_authenticated:
-        driver_rides = Ride.objects.filter(driver_username = request.user.username)
-        passenger_rides = Ride.objects.filter(passenger_username = request.user.username)
-        offered_driver_rides = Driver.objects.filter(username = request.user.username)
-        offered_passenger_rides = Passenger.objects.filter(username = request.user.username)
+        net_date = datetime.date.today() + datetime.timedelta(days=2)
+        driver_rides = Ride.objects.filter(driver_username = request.user.username, date__range= [datetime.date.today(), '2030-12-31'])
+        passenger_rides = Ride.objects.filter(passenger_username = request.user.username, date__range= [datetime.date.today(), '2030-12-31'])
+        offered_driver_rides = Driver.objects.filter(user = request.user, date__range= [net_date, '2030-12-31'])
+        offered_passenger_rides = Passenger.objects.filter(user = request.user, date__range= [net_date, '2030-12-31'])
+        pass_to_exclude = []
+        drvr_to_exclude = []
+
+        for off_ride in offered_driver_rides:
+            for ride in driver_rides:
+                if off_ride.id == ride.driver_ride_id.id:
+                    drvr_to_exclude.append(off_ride.id)
+        offered_driver_rides_excluded = Driver.objects.filter(user = request.user, date__range= [net_date, '2030-12-31']).exclude(id__in=drvr_to_exclude)
+
+        for off_ride in offered_passenger_rides:
+            for ride in passenger_rides:
+                if off_ride.id == ride.passenger_ride_id.id:
+                    pass_to_exclude.append(off_ride.id)
+        offered_passenger_rides_excluded = Passenger.objects.filter(user = request.user, date__range= [net_date, '2030-12-31']).exclude(id__in=pass_to_exclude)
 
         if len(driver_rides) == 0:
             driver_flag = False
@@ -57,12 +78,12 @@ def profile_view(request):
         else:
             passenger_flag = True
 
-        if len(offered_driver_rides) == 0:
+        if len(offered_driver_rides_excluded) == 0:
             offered_driver_flag = False
         else:
             offered_driver_flag = True
 
-        if len(offered_passenger_rides) == 0:
+        if len(offered_passenger_rides_excluded) == 0:
             offered_passenger_flag = False
         else:
             offered_passenger_flag = True
@@ -78,8 +99,8 @@ def profile_view(request):
             'offered_driver_flag':offered_driver_flag,
             'driver_rides':driver_rides,
             'passenger_rides':passenger_rides,
-            'offered_driver_rides':offered_driver_rides,
-            'offered_passenger_rides':offered_passenger_rides,
+            'offered_driver_rides':offered_driver_rides_excluded,
+            'offered_passenger_rides':offered_passenger_rides_excluded,
         }
         return render(request, 'profile.html', info)
     else:
@@ -89,6 +110,7 @@ def add_driver_view(request):
     form = DriverForm(request.POST)
     
     if form.is_valid() and request.user.is_authenticated:
+        print(form.cleaned_data['stops'])
 
         time_string = str(form.cleaned_data['date']) + 'T' + str(form.cleaned_data['time_dep'])
         time_stripped = time.strptime(time_string, '%Y-%m-%dT%H:%M:%S')
@@ -107,7 +129,7 @@ def add_driver_view(request):
             arr_times_str = arr_times_str + str(el) + ' '
 
         driver = Driver()
-        driver.username = request.user.username
+        driver.user = request.user
         driver.start = form.cleaned_data['start']
         driver.end = form.cleaned_data['end']
         driver.stops = form.cleaned_data['stops']
@@ -138,7 +160,7 @@ def add_passenger_view(request):
         print(epoch_time_dep)
 
         passenger = Passenger()
-        passenger.username = request.user.username
+        passenger.user = request.user
         passenger.start = form.cleaned_data['start']
         passenger.end = form.cleaned_data['end']
         passenger.distance = distance[0]/1000
@@ -159,7 +181,7 @@ def add_passenger_view(request):
 def edit_driver_ride_view(request, id=None):
 
     ride = get_object_or_404(Driver, id=id)
-    if ride.username != request.user.username:
+    if ride.user != request.user:
         return HttpResponseForbidden()
     
     t = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(ride.time_dep))
@@ -221,7 +243,7 @@ def edit_driver_ride_view(request, id=None):
 def edit_passenger_ride_view(request, id=None):
 
     ride = get_object_or_404(Passenger, id=id)
-    if ride.username != request.user.username:
+    if ride.user != request.user:
         return HttpResponseForbidden()
     
     t = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(ride.time_dep))
@@ -266,9 +288,9 @@ def edit_profile_view(request):
     user = get_object_or_404(User, username=request.user.username)
     rides_d = Ride.objects.filter(driver_username=request.user.username)
     rides_p = Ride.objects.filter(passenger_username=request.user.username)
-    passenger = Passenger.objects.filter(username=request.user.username)
-    print(len(passenger))
-    driver = Driver.objects.filter(username=request.user.username)
+    #passenger = Passenger.objects.filter(username=request.user.username)
+    #print(len(passenger))
+    #driver = Driver.objects.filter(username=request.user.username)
         
     form = EditProfileForm(request.user.username, request.POST, instance=request.user)
     if request.POST and form.is_valid():
@@ -280,14 +302,7 @@ def edit_profile_view(request):
             el.passenger_username = form.cleaned_data['username']
             el.save()
 
-        for el in passenger:
-            el.username = form.cleaned_data['username']
-            print('TU')
-            el.save()
-
-        for el in driver:
-            el.username = form.cleaned_data['username']
-            el.save()
+        
         user.username = form.cleaned_data['username']
         user.email = form.cleaned_data['email']
         user.first_name = form.cleaned_data['first_name']
@@ -307,6 +322,7 @@ def edit_profile_view(request):
 
 def delete_passenger_view(request, id = None):
     if request.user.is_authenticated:
+        request.session['delete_visited'] = True
         passenger = get_object_or_404(Passenger, id=id)
         info = {'ride':passenger, 'who':'pasażer'}
         passenger.delete()
@@ -316,6 +332,7 @@ def delete_passenger_view(request, id = None):
 
 def delete_driver_view(request, id = None):
     if request.user.is_authenticated:
+        request.session['delete_visited'] = True
         driver = get_object_or_404(Driver, id=id)
         info = {'ride':driver, 'who':'kierowca'}
         driver.delete()
@@ -325,6 +342,7 @@ def delete_driver_view(request, id = None):
 
 def delete_p_ride_view(request, id = None):
     if request.user.is_authenticated:
+        request.session['delete_visited'] = True
         ride = get_object_or_404(Ride, ride_id=id)
         info = {'ride':ride, 'who':'pasażer'}
         ride.delete()
@@ -334,6 +352,7 @@ def delete_p_ride_view(request, id = None):
 
 def delete_d_ride_view(request, id = None):
     if request.user.is_authenticated:
+        request.session['delete_visited'] = True
         ride = get_object_or_404(Ride, ride_id=id)
         info = {'ride':ride, 'who':'kierowca'}
         ride.delete()
@@ -342,14 +361,16 @@ def delete_d_ride_view(request, id = None):
         redirect('home')
 
 def ride_chat_view(request, id = None):
+    request.session['ride_chat_visited'] = True
     form = MessageForm(request.POST)
     messages = Message.objects.filter(driver_ride_id=id)
     msgs = []
     drvr = get_object_or_404(Driver, id=id)
+    drvr_username = get_object_or_404(User, id=drvr.user_id)
     for i in range(len(messages)):
         msg = []
         msg.append(messages[i].user)                        # 0 - user
-        if messages[i].user == drvr.username:
+        if messages[i].user == drvr_username.username:
             msg.append(True)                                # 1 - if driver
         else:
             msg.append(False)

@@ -7,16 +7,21 @@
   </div>
     {% if driver_flag %}
   <div class="rides">
+    <h3>Jako kierowca</h3>
     <table>
       <tr>
-        <th>Data</th>
-        <th>Pasażer</th>
-        <th>Skąd</th>
-        <th>Dokąd</th>
+        <th>ID <br> podróży</th>
+        <th>Dnia</th>
+        <th>Podwozisz</th>
+        <th>Z</th>
+        <th>Do</th>
+        <th></th>
+        <th></th>
       </tr>
     {% for obj in driver_rides %}
       <tr>
-        <td>{{ obj.date }}</td>
+        <td>{{ obj.driver_ride_id_id }}</td>
+        <td>{{ obj.date|date:"j.m.Y" }}</td>
         <td>{{ obj.passenger_username }}</td>
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
@@ -34,20 +39,21 @@
 {% endif %}
 
 {% if passenger_flag %}
-  <div class="rides">  
+  <div class="rides"> 
+    <h3>Jako pasażer</h3> 
     <table>
       <tr>
-        <th>Data</th>
+        <th>ID <br> podróży</th>
+        <th>Dnia</th>
         <th>Kierowca</th>
-        <th>Auto</th>
-        <th>Skąd</th>
-        <th>Dokąd</th>
+        <th>Podwiezie <br> cię z </th>
+        <th>Do</th>
       </tr>
     {% for obj in passenger_rides %}
       <tr>
-        <td>{{ obj.date }}</td>
+        <td>{{ obj.driver_ride_id_id }}</td>
+        <td>{{ obj.date|date:"j.m.Y" }}</td>
         <td>{{ obj.driver_username }}</td>
-        <td>{{ obj.car_model }}</td>
         <td>{{ obj.pick_up }}</td>
         <td>{{ obj.drop_off }}</td>
         <td><a href="{% url 'delete_p_ride' obj.ride_id %}">usuń</a></td>
@@ -67,6 +73,7 @@
 </div>
 {% if offered_driver_flag %}
   <div class="rides">
+    <h3>Jako kierowca</h3>
     <table>
       <tr>
         <th>Data</th>
@@ -76,7 +83,7 @@
       </tr>
     {% for obj in offered_driver_rides %}
       <tr>
-        <td>{{ obj.date }}</td>
+        <td>{{ obj.date|date:"j.m.Y" }}</td>
         <td>{{ obj.start }}</td>
         <td>{{ obj.end }}</td>
         <td>{{ obj.stops }}</td>
@@ -97,6 +104,7 @@
 
 {% if offered_passenger_flag %}
   <div class="rides">
+    <h3>Jako pasażer</h3>
     <table>
       <tr>
         <th>Data</th>
@@ -105,7 +113,7 @@
       </tr>
     {% for obj in offered_passenger_rides %}
       <tr>
-        <td>{{ obj.date }}</td>
+        <td>{{ obj.date|date:"j.m.Y" }}</td>
         <td>{{ obj.start }}</td>
         <td>{{ obj.end }}</td>
         <td><a href="{% url 'edit_passenger' obj.id %}">edytuj</a></td>

@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from drivers.models import Driver, Passenger, Ride, Driver_hist, Passenger_hist, Ride_hist
+from django.contrib.auth.models import User
 import numpy as np
 from lpsolve55 import *
 from lp_solve import *
@@ -92,7 +93,7 @@ class Command(BaseCommand):
                 if d_start == p_start and d_end == p_end:
                     if d_cigs == False or (d_cigs == True and p_cigs == False):
                         if d_pets == False or (d_pets == True and p_pets == False):
-                            if p_dep <= d_dep <= p_dep+10800:
+                            if p_dep <= d_dep <= p_dep+7200:
                                 b[b_i] = 1
                                 cons_type[b_i] = 1
                                 #print('xd')
@@ -100,7 +101,7 @@ class Command(BaseCommand):
                 if d_start == p_start and p_end in d_stops:
                     if d_cigs == False or (d_cigs == True and p_cigs == False):
                         if d_pets == False or (d_pets == True and p_pets == False):
-                            if p_dep <= d_dep <= p_dep+10800:
+                            if p_dep <= d_dep <= p_dep+7200:
                                 b[b_i] = 1
                                 cons_type[b_i] = 1
                                 #print('xd')
@@ -108,7 +109,7 @@ class Command(BaseCommand):
                 if p_start in d_stops and p_end == d_end:
                     if d_cigs == False or (d_cigs == True and p_cigs == False):
                         if d_pets == False or (d_pets == True and p_pets == False):
-                            if p_dep <= d_arr_stops[d_stops.index(p_start)] <= p_dep+10800:
+                            if p_dep <= d_arr_stops[d_stops.index(p_start)] <= p_dep+7200:
                                 b[b_i] = 1
                                 cons_type[b_i] = 1
                                 #print('xd')
@@ -116,7 +117,7 @@ class Command(BaseCommand):
                 if (p_start in d_stops and p_end in d_stops) and d_stops.index(p_start) < d_stops.index(p_end):
                     if d_cigs == False or (d_cigs == True and p_cigs == False):
                         if d_pets == False or (d_pets == True and p_pets == False):
-                            if p_dep <= d_arr_stops[d_stops.index(p_start)] <= p_dep+10800:
+                            if p_dep <= d_arr_stops[d_stops.index(p_start)] <= p_dep+7200:
                                 b[b_i] = 1
                                 cons_type[b_i] = 1
                                 #print('xd')
@@ -159,25 +160,42 @@ class Command(BaseCommand):
         #print(result)
         assign = np.reshape(result[0], (len(ps), len(drs)), order='C')
         print(assign)
+
+        file = open("report.txt", "w")
+        r_i = 1
+
+     
+    
+ 
+
         for i in range(len(ps)):
             for j in range(len(drs)):
                 if assign[i][j] == 1:
                     driver_obj = Driver.objects.get(id=drs[j].id)
                     passenger_obj = Passenger.objects.get(id=ps[i].id)
-                    ride = Ride(driver_username=drs[j].username, passenger_username=ps[i].username, date=drs[j].date, pick_up=ps[i].start, drop_off=ps[i].end, driver_ride_id=driver_obj, passenger_ride_id=passenger_obj, car_model=drs[j].car_model)
+                    driver_username = User.objects.get(id=driver_obj.user_id)
+                    passenger_username = User.objects.get(id=passenger_obj.user_id)
+                    ride = Ride(driver_username=driver_username.username, passenger_username=passenger_username.username, date=drs[j].date, pick_up=ps[i].start, drop_off=ps[i].end, driver_ride_id=driver_obj, passenger_ride_id=passenger_obj, car_model=drs[j].car_model)
                     ride.save()
-                    print('passenger ' + ps[i].username + 'rides with driver ' + drs[j].username)
+                    print('passenger ' + str(ps[i].user_id) + 'rides with driver ' + str(drs[j].user_id))
+                    file.write(str(r_i) + '. pasażer ' + str(ps[i].user_id) + ' przypisany do kierowcy ' + str(drs[j].user_id) + '\n')
+                    r_i += 1
 
+        file.close()
 #porzadkowanie bazy danych
         ps_obj = Passenger.objects.filter(date__lt=datetime.date.today())
         for i in range(len(ps_obj)):
-            ps_hist = Passenger_hist(username=ps_obj[i].username, start=ps_obj[i].start, end=ps_obj[i].end, distance=ps_obj[i].distance, date=ps_obj[i].date, time_dep=ps_obj[i].time_dep, time_arr=ps_obj[i].time_arr, cigs=ps_obj[i].cigs, pets=ps_obj[i].pets, max_cost=ps_obj[i].max_cost)    
+            passenger_obj = Passenger.objects.get(id=ps_obj[i].id)
+            passenger_username = User.objects.get(id=passenger_obj.user_id)
+            ps_hist = Passenger_hist(user=passenger_username, start=ps_obj[i].start, end=ps_obj[i].end, distance=ps_obj[i].distance, date=ps_obj[i].date, time_dep=ps_obj[i].time_dep, time_arr=ps_obj[i].time_arr, cigs=ps_obj[i].cigs, pets=ps_obj[i].pets, max_cost=ps_obj[i].max_cost)    
             ps_hist.save()
             ps_obj[i].delete()
 
         drs_obj = Driver.objects.filter(date__lt=datetime.date.today())
         for j in range(len(drs_obj)):
-            drs_hist = Driver_hist(username=drs_obj[j].username, start=drs_obj[j].start, end=drs_obj[j].end, stops=drs_obj[j].stops, stops_arr=drs_obj[j].stops_arr, date=drs_obj[j].date, time_dep=drs_obj[j].time_dep, time_arr=drs_obj[j].time_arr, car_model=drs_obj[j].car_model, car_cap=drs_obj[j].car_cap, cigs=drs_obj[j].cigs, pets=drs_obj[j].pets, price=drs_obj[j].price)    
+            driver_obj = Driver.objects.get(id=drs_obj[j].id)
+            driver_username = User.objects.get(id=driver_obj.user_id)
+            drs_hist = Driver_hist(user=driver_username, start=drs_obj[j].start, end=drs_obj[j].end, stops=drs_obj[j].stops, stops_arr=drs_obj[j].stops_arr, date=drs_obj[j].date, time_dep=drs_obj[j].time_dep, time_arr=drs_obj[j].time_arr, car_model=drs_obj[j].car_model, car_cap=drs_obj[j].car_cap, cigs=drs_obj[j].cigs, pets=drs_obj[j].pets, price=drs_obj[j].price)    
             drs_hist.save()
             drs_obj[j].delete()
         

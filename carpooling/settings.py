@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'drivers',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -79,7 +80,7 @@ WSGI_APPLICATION = 'carpooling.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'carpool',
+        'NAME': 'inz',
         'USER': 'root',
         'PASSWORD': '',
         'HOST': 'localhost',
@@ -87,6 +88,7 @@ DATABASES = {
     }
 }
 
+#DATE_FORMAT = 'j N, Y'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

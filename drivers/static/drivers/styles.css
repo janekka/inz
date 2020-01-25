@@ -47,14 +47,21 @@ main .container .rides {
   text-align: center;
   min-width: 45vh;
 }
+main .container .rides h3 {
+  margin: 2px;
+  border-bottom: thin solid #d1d1d1;
+}
 main .container .rides table {
   border-collapse: collapse;
   width: 100%;
 }
-main .container .rides table td, main .container .rides table th {
+main .container .rides table td {
   border-right: solid;
   border-color: #d1d1d1;
   border-width: 2px;
+  padding: 3px;
+}
+main .container .rides table th {
   padding: 3px;
 }
 main .container .rides table td:last-child {
@@ -102,6 +109,11 @@ main .container .forms {
   box-shadow: 3px 3px gray;
 }
 main .container .forms form input[type=text] {
+  border: 2px solid;
+  border-color: #bf35ff;
+  width: 95%;
+}
+main .container .forms form input[type=email] {
   border: 2px solid;
   border-color: #bf35ff;
   width: 95%;

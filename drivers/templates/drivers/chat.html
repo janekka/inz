@@ -24,7 +24,7 @@
         {% endfor %}
         
         <div class="msg_form">
-            <form method="post">
+            <form method="post" autocomplete="off">
                 {% csrf_token %}
                 {% for field in form %}
                   <p>

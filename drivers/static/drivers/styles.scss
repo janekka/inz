@@ -55,14 +55,22 @@ main {
             text-align: center;
             min-width: 45vh;
 
+            h3 {
+                margin: 2px;
+                border-bottom: thin solid rgb(209, 209, 209);
+            }
+
             table {
                 border-collapse: collapse;
                 width: 100%;
 
-                td, th {
+                td {
                     border-right: solid;
                     border-color: rgb(209, 209, 209);
                     border-width: 2px;
+                    padding: 3px;
+                }
+                th {
                     padding: 3px;
                 }
 
@@ -133,6 +141,12 @@ main {
                     
                 }
 
+                input[type=email] {
+                    border: 2px solid;
+                    border-color: rgb(191, 53, 255);
+                    width: 95%;
+                }
+                
                 input[type=password] {
                     border: 2px solid;
                     border-color: rgb(191, 53, 255);
